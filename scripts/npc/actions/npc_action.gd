@@ -4,15 +4,28 @@ extends RefCounted
 
 var display_name := "Idling"
 var color := Color.WHITE
-var energy_per_tick := 0.0
+## Applied to the agent's stats every tick, e.g. `{ NpcAgent.ENERGY: -1.0 }`.
+var stat_changes_per_tick: Dictionary[StringName, float] = {}
 ## How many ticks the action lasts. 0 means it runs until `is_finished` says otherwise.
 var duration_ticks := 0
+## Whether an urgent behavior (see NpcBrain.URGENT_SCORE) may cut this action short.
+var interruptible := true
 var ticks_elapsed := 0
+
+
+func enter(_agent: NpcAgent) -> void:
+	pass
+
+
+## `completed` is false when the action was interrupted or the NPC died.
+func exit(_agent: NpcAgent, _completed: bool) -> void:
+	pass
 
 
 func tick(agent: NpcAgent) -> void:
 	ticks_elapsed += 1
-	agent.change_energy(energy_per_tick)
+	for stat_id in stat_changes_per_tick:
+		agent.change_stat(stat_id, stat_changes_per_tick[stat_id])
 
 
 func is_finished(_agent: NpcAgent) -> bool:

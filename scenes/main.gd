@@ -71,7 +71,7 @@ func _build_ui() -> void:
 		top_bar.add_child(speed_button)
 
 	root.add_child(HSeparator.new())
-	root.add_child(NpcRow.create_header())
+	root.add_child(NpcRow.create_header(NpcManager.create_stats()))
 
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
